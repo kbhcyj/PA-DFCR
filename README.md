@@ -1,7 +1,7 @@
 # PA-DFCR Experiment Suite
 
 **PA-DFCR (Progressive-Adaptive Data-Free Compression Rate)** 알고리즘의 공식 구현체 및 실험 스위트입니다.
-본 프로젝트는 Iterative Pruning 기법을 사용하여 LBYL (Look-Before-You-Leap) 방식의 성능을 개선하는 것을 목표로 합니다.
+본 프로젝트는 Iterative Pruning 기법을 사용하여 LBYL (Look-Before-You-Leave) 방식의 성능을 개선하는 것을 목표로 합니다.
 
 ## 주요 기능
 - **Iterative LBYL**: 반복적 가지치기를 통한 성능 보존 최적화
