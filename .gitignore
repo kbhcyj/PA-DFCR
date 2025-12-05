@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.conda/
+
+# Data & Models
+data/
+saved_models/
+*.pth
+*.pth.tar
+
+# Experiment Results & Logs
+results*/
+test_results*/
+suite_results*/
+*.log
+*.csv
+# result_origin은 비교 검증용으로 포함할지 선택 (여기서는 포함하도록 주석 처리하지 않음)
+# result_origin/
+
+# IDE
+.vscode/
+.idea/
+.cursor/
+
