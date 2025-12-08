@@ -20,6 +20,7 @@ data/
 results*/
 test_results*/
 suite_results*/
+plots/
 *.log
 *.csv
 
