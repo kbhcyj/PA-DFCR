@@ -1,70 +1,122 @@
 # PA-DFCR Experiment Suite
 
 **PA-DFCR (Progressive-Adaptive Data-Free Compression Rate)** 알고리즘의 공식 구현체 및 실험 스위트입니다.
-본 프로젝트는 Iterative Pruning 기법을 사용하여 LBYL (Look-Before-You-Leap) 방식의 성능을 개선하는 것을 목표로 합니다.
+본 프로젝트는 기존 **LBYL (Look-Before-You-Leap)** 가지치기(Pruning) 기법을 **Iterative (반복적)** 방식으로 확장하여, Fine-tuning 없이도 모델의 성능 손실을 최소화하는 것을 목표로 합니다.
 
-## 주요 기능
-- **Iterative LBYL**: 반복적 가지치기를 통한 성능 보존 최적화
-- **Experiment Suite**: 다양한 모델(VGG16, ResNet50 등)에 대한 대규모 실험 자동화
-- **Reproducibility**: 시드 고정 및 결정론적(Deterministic) 실행 지원
+## 📌 주요 특징
+- **Iterative Pruning**: 한 번에 압축하는 대신, 여러 단계에 걸쳐 점진적으로 압축하여 정보 손실을 줄입니다.
+- **Data-Free**: 원본 데이터셋을 사용하여 재학습(Fine-tuning)하거나 Batch Normalization을 재보정(Re-calibration)하지 않습니다.
+- **Reproducibility**: 모든 실험은 시드(Seed)를 고정하여 결정론적(Deterministic)으로 실행됩니다.
 
-## 시작하기
+---
 
-### 1. 환경 설정
-Python 3.8+ 및 PyTorch 환경이 필요합니다.
+## 🚀 시작하기 (Getting Started)
+
+### 1. 환경 설정 (Prerequisites)
+
+Python 3.8 이상이 필요합니다. Anaconda를 권장합니다.
 
 ```bash
-# 가상환경 생성 (선택사항)
+# 1. 가상환경 생성 및 활성화
 conda create -n pa-dfcr python=3.8
 conda activate pa-dfcr
 
-# 필수 패키지 설치
+# 2. 의존성 패키지 설치
 pip install -r requirements.txt
 ```
 
-### 2. 데이터셋 및 모델 준비
-프로젝트 루트에 `data/`와 `saved_models/` 디렉토리를 생성하고 필요한 파일을 위치시켜야 합니다.
+### 2. 데이터셋 및 모델 준비 (Setup)
 
-- **Data**: CIFAR-10, CIFAR-100, FashionMNIST 데이터셋
-- **Models**: Pre-trained `.pth.tar` 파일
+본 프로젝트는 CIFAR-10, CIFAR-100 등의 데이터셋과 사전 학습된(Pre-trained) 모델을 사용합니다.
+제공된 스크립트를 사용하여 필요한 폴더 구조를 잡고 안내를 받으세요.
 
 ```bash
-# 예시 구조
-PA_DFCR_LBYL_Experiment/
-├── data/
-│   ├── cifar-10-batches-py/
-│   └── ...
-└── saved_models/
-    ├── VGG.cifar10.original.pth.tar
-    └── ResNet.cifar100.original.50.pth.tar
+# 데이터셋 및 모델 폴더 생성 스크립트 실행
+bash download_assets.sh
 ```
 
-### 3. 실험 실행
+스크립트 실행 후, **`saved_models/`** 폴더에 다음 사전 학습된 모델 파일(`.pth.tar`)을 넣어주세요.
+(저작권 및 용량 문제로 깃허브에는 포함되지 않았습니다.)
 
-#### 단일 실험 실행
+**필수 모델 파일 목록:**
+- `saved_models/VGG.cifar10.original.pth.tar`
+- `saved_models/ResNet.cifar100.original.50.pth.tar`
+- `saved_models/LeNet_300_100.original.pth.tar`
+
+**폴더 구조 예시:**
+```text
+PA_DFCR_LBYL_Experiment/
+├── data/                  # 데이터셋 (CIFAR-10 등 자동 다운로드됨)
+├── saved_models/          # [중요] 여기에 .pth.tar 파일을 넣으세요
+├── src/                   # 소스 코드
+├── main.py                # 실행 스크립트
+└── ...
+```
+
+---
+
+## 🧪 실험 실행 (Usage)
+
+### 1. 단일 실험 실행 (Quick Start)
+간단하게 VGG16 모델을 50% 압축하는 실험을 수행합니다.
+
 ```bash
-# VGG16, CIFAR-10, 50% 압축, 2회 반복
 bash run_experiment.sh
 ```
-*`run_experiment.sh` 파일을 열어 설정을 변경할 수 있습니다.*
+* `run_experiment.sh` 파일을 열어 `ARCH`, `COMPRESSION` 등의 변수를 수정하면 다른 실험도 가능합니다.
 
-#### 전체 실험 스위트 실행
+### 2. 대규모 실험 스위트 (Suite)
+여러 모델과 압축률 조합을 한 번에 실행하려면 스위트를 사용하세요.
+
 ```bash
-# suite.py에 정의된 모든 실험을 순차적으로 실행
+# 1. 실행 계획 확인 (Dry Run)
+bash run_suite.sh --dry-run
+
+# 2. 전체 실험 시작 (GPU 권장)
 bash run_suite.sh
 
-# 이미 완료된 실험 건너뛰기 (Resume)
+# 3. 중단된 실험 이어하기 (Resume)
 bash run_suite.sh --resume
+```
+* `suite.py` 파일 상단의 `EXPERIMENTS` 리스트를 수정하여 실험 계획을 커스터마이징 할 수 있습니다.
 
-# 실행 계획 미리보기 (Dry Run)
-bash run_suite.sh --dry-run
+### 3. 상세 옵션 (Custom CLI)
+`main.py`를 직접 실행하여 세부 설정을 조정할 수 있습니다.
+
+```bash
+# 예: ResNet50, 70% 압축, 10회 반복
+python main.py \
+    --arch ResNet50 \
+    --dataset cifar100 \
+    --pretrained saved_models/ResNet.cifar100.original.50.pth.tar \
+    --compression 0.7 \
+    --iterations 10 \
+    --lamda-1 0.000006 --lamda-2 0.0001 \
+    --results-dir my_custom_results
 ```
 
-## 결과 확인
-실험 결과는 CSV 형식으로 저장됩니다.
-- 단일 실행: `results_final/`
-- 스위트 실행: `suite_results_YYYYMMDD_HHMMSS/` (통합 결과는 `summary_all.csv`)
+---
 
-## 참고
-이 코드는 LBYL2022 연구를 기반으로 확장되었습니다.
-Fine-tuning 없이 Pruning 만으로 성능을 유지하는 실험에 최적화되어 있습니다.
+## 📊 결과 확인 (Results)
+
+실험이 완료되면 `csv` 형식의 결과 파일이 생성됩니다.
+
+*   **파일명 형식**: `iterative_results_{모델}_{데이터셋}_comp{압축률}_iter{반복수}_{타임스탬프}.csv`
+*   **내용**: 각 반복(Iteration) 별 압축률, 정확도(Accuracy), 파라미터 수 등이 기록됩니다.
+
+**예시:**
+```csv
+iteration,compression_rate,cumulative_compression,accuracy,num_parameters,...
+0,0.0,0.0,93.7,14987722,...
+1,0.29,0.29,83.4,7549756,...
+2,0.29,0.50,53.6,3820010,...
+```
+
+스위트 실행 시, 모든 결과가 통합된 `summary_all.csv` 파일도 생성됩니다.
+
+---
+
+## 📝 참고 사항
+*   이 프로젝트는 `LBYL2022` 연구 코드를 기반으로 리팩토링되었습니다.
+*   **One-shot LBYL**을 재현하려면 `--iterations 1`로 설정하세요.
+*   **PA-DFCR (Iterative)**는 `--iterations`를 2 이상으로 설정하면 됩니다.
