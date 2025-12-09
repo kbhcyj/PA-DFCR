@@ -418,6 +418,8 @@ class Decompose:
 
                     # Merge scale matrix
                     if z != None:
+                        if self.cuda:
+                            original = original.cuda()
                         original = torch.mm(original, z)
 
                     layer_id += 1
@@ -721,6 +723,7 @@ class Decompose:
                             original = original[:, input_channel_index, :, :]
                             for i, f in enumerate(self.param_dict[layer]):  # self.param_dict[layer] : 16,16,3,3 / f :,16,3,3
                                 o = f.view(f.shape[0], -1)  # 16,9
+                                if self.cuda: o = o.cuda()
                                 o = torch.mm(scale_mat, o)  # (11,16) * (16, 9)
                                 o = o.view(scale_mat.shape[0], f.shape[1], f.shape[2])
                                 original[i, :, :, :] = o
@@ -775,6 +778,7 @@ class Decompose:
                             for i, f in enumerate(
                                     self.param_dict[layer]):
                                 o = f.view(f.shape[0], -1)
+                                if self.cuda: o = o.cuda()
                                 o = torch.mm(scale_mat, o)
                                 o = o.view(scale_mat.shape[0], f.shape[1], f.shape[2])
                                 original[i, :, :, :] = o
@@ -893,6 +897,7 @@ class Decompose:
                             for i, f in enumerate(
                                     self.param_dict[layer]):  # self.param_dict[layer] : 16,16,3,3 / f :,16,3,3
                                 o = f.view(f.shape[0], -1)  # 16,9
+                                if self.cuda: o = o.cuda()
                                 o = torch.mm(scale_mat, o)  # (11,16) * (16, 9)
                                 o = o.view(scale_mat.shape[0], f.shape[1], f.shape[2])
                                 original[i, :, :, :] = o
@@ -1034,6 +1039,7 @@ class Decompose:
                             original = original[:, input_channel_index, :, :]
                             for i, f in enumerate(self.param_dict[layer]):  # self.param_dict[layer] : 16,16,3,3 / f :,16,3,3
                                 o = f.view(f.shape[0], -1)  # 16,9
+                                if self.cuda: o = o.cuda()
                                 o = torch.mm(scale_mat, o)  # (11,16) * (16, 9)
                                 o = o.view(scale_mat.shape[0], f.shape[1], f.shape[2])
                                 original[i, :, :, :] = o
@@ -1086,6 +1092,7 @@ class Decompose:
                             for i, f in enumerate(
                                     self.param_dict[layer]):  # self.param_dict[layer] : 16,16,3,3 / f :,16,3,3
                                 o = f.view(f.shape[0], -1)  # 16,9
+                                if self.cuda: o = o.cuda()
                                 o = torch.mm(scale_mat, o)  # (11,16) * (16, 9)
                                 o = o.view(scale_mat.shape[0], f.shape[1], f.shape[2])
                                 original[i, :, :, :] = o

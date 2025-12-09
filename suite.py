@@ -10,47 +10,45 @@ from pathlib import Path
 from typing import List, Dict, Any
 
 # --- 실험 설정 (Configuration Grid) ---
-# 아래는 다양한 모델에 대한 실험 설정 예시입니다.
 EXPERIMENTS = [
-    # 1. VGG16 on CIFAR-10 (검증용 설정)
+    # 1. VGG16 on CIFAR-10
     {
         "arch": "VGG16",
         "dataset": "cifar10",
         "pretrained": "saved_models/VGG.cifar10.original.pth.tar",
-        "compressions": [0.5],
-        "iterations": [1, 2],
+        "compressions": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7],
+        "iterations": [1, 2, 3, 5, 8, 10, 15, 20, 30, 40, 50],
         "lamda_1": 0.0,
         "lamda_2": 0.0001,
         "lambda1_factor": 0.2,
         "lambda2_factor": 0.1,
     },
     
-    # [Full Experiment Examples]
     # 2. LeNet-300-100 on FashionMNIST
-    # {
-    #     "arch": "LeNet_300_100",
-    #     "dataset": "fashionMNIST",
-    #     "pretrained": "saved_models/LeNet_300_100.original.pth.tar",
-    #     "compressions": [0.5, 0.9],
-    #     "iterations": [1, 10, 20],
-    #     "lamda_1": 0.0,
-    #     "lamda_2": 0.3,
-    #     "lambda1_factor": 0.2,
-    #     "lambda2_factor": 0.1,
-    # },
+    {
+        "arch": "LeNet_300_100",
+        "dataset": "fashionMNIST",
+        "pretrained": "saved_models/LeNet_300_100.original.pth.tar",
+        "compressions": [0.5, 0.6, 0.7, 0.8, 0.9],
+        "iterations": [1, 2, 3, 5, 8, 10, 15, 20, 30, 40, 50, 60],
+        "lamda_1": 0.0,
+        "lamda_2": 0.3,
+        "lambda1_factor": 0.2,
+        "lambda2_factor": 0.1,
+    },
     
     # 3. ResNet50 on CIFAR-100
-    # {
-    #     "arch": "ResNet50",
-    #     "dataset": "cifar100",
-    #     "pretrained": "saved_models/ResNet.cifar100.original.50.pth.tar",
-    #     "compressions": [0.3, 0.5, 0.7],
-    #     "iterations": [1, 10, 20],
-    #     "lamda_1": 0.000006,
-    #     "lamda_2": 0.0001,
-    #     "lambda1_factor": 0.2,
-    #     "lambda2_factor": 0.1,
-    # },
+    {
+        "arch": "ResNet50",
+        "dataset": "cifar100",
+        "pretrained": "saved_models/ResNet.cifar100.original.50.pth.tar",
+        "compressions": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7],
+        "iterations": [1, 2, 3, 5, 8, 10, 15, 20, 30, 40, 50],
+        "lamda_1": 0.000006,
+        "lamda_2": 0.0001,
+        "lambda1_factor": 0.2,
+        "lambda2_factor": 0.1,
+    },
 ]
 
 def timestamp() -> str:
@@ -118,7 +116,7 @@ def aggregate_results(results_dir: str, output_file: str):
 
 def main():
     parser = argparse.ArgumentParser(description="PA-DFCR Suite Runner")
-    parser.add_argument("--results-dir", default=f"suite_results_{timestamp()}")
+    parser.add_argument("--results-dir", default="results")
     parser.add_argument("--dry-run", action="store_true", help="명령어만 출력하고 실행하지 않음")
     parser.add_argument("--no-cuda", action="store_true", help="CPU 모드로 실행")
     parser.add_argument("--resume", action="store_true", help="이미 결과 파일이 있으면 건너뜀")
@@ -152,7 +150,7 @@ def main():
                     continue
 
                 cmd = [
-                    "python", "main.py",
+                    sys.executable, "main.py",
                     "--arch", arch,
                     "--dataset", dataset,
                     "--pretrained", pretrained,

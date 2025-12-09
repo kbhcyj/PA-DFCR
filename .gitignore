@@ -20,7 +20,7 @@ data/
 results*/
 test_results*/
 suite_results*/
-plots/
+# plots/  <-- Uncommented to allow upload
 *.log
 *.csv
 

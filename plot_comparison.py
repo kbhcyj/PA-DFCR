@@ -17,7 +17,7 @@ except:
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Generate Best Iterative vs One-shot Comparison Plots")
-    parser.add_argument("--results-dir", type=str, required=True, help="Directory containing result CSV files")
+    parser.add_argument("--results-dir", type=str, default="results", help="Directory containing result CSV files")
     parser.add_argument("--out-dir", type=str, default="plots", help="Output directory for plots")
     return parser.parse_args()
 
@@ -35,7 +35,7 @@ def main():
 
     # 파일명 패턴: iterative_results_{arch}_{dataset}_comp{comp}_iter{iters}_{timestamp}.csv
     # 예: iterative_results_VGG16_cifar10_comp50_iter1_20251204_043611.csv
-    file_pattern = re.compile(r"iterative_results_(?P<arch>[^_]+)_(?P<dataset>[^_]+)_comp(?P<comp>\d+)_iter(?P<iters>\d+)_.*\.csv")
+    file_pattern = re.compile(r"iterative_results_(?P<arch>.+)_(?P<dataset>[^_]+)_comp(?P<comp>\d+)_iter(?P<iters>\d+)_.*\.csv")
 
     # 데이터 수집
     data = []
