@@ -1,6 +1,6 @@
 # PA-DFCR Experiment Suite
 
-**PA-DFCR (Progressive-Adaptive Data-Free Compression Restoration)** 알고리즘의 공식 구현체 및 실험 스위트입니다.
+**PA-DFCR (Progressive-Adaptive Data-Free Compression and Restoration)** 알고리즘의 공식 구현체 및 실험 스위트입니다.
 본 프로젝트는 기존 **LBYL (Look-Before-You-Leap)** 가지치기(Pruning) 기법을 **Iterative (반복적)** 방식으로 확장하여, Fine-tuning 없이도 모델의 성능 손실을 최소화하는 것을 목표로 합니다.
 
 ## 📌 주요 특징
